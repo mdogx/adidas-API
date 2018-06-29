@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.get;
 
@@ -29,36 +28,35 @@ public class weatherTest {
     @Test
     public void getTemperatureByCityName() throws JSONException {
 
-        // get weather by city name
-        Response responseByName = get(weatherEndpoint + prefixWeatherRequestByCityName + cityName + postfixRequest);
-        JSONObject jsonResponseByName = new JSONObject(responseByName.asString());
-        int temperatureByName = jsonResponseByName.getJSONObject(mainObjectKey).getInt("temp");
+        String weatherByCityNameURL = weatherEndpoint + prefixWeatherRequestByCityName + cityName + postfixRequest;
+        JSONObject jsonResponse = new JSONObject(get(weatherByCityNameURL).asString());
+        int temperature = jsonResponse.getJSONObject(mainObjectKey).getInt(temperatureKey);
 
         // check that the correct response is received
-        Assert.assertEquals(jsonResponseByName.getString(cityNameKey), cityName, "The names of cities in the request and response do not match");
+        Assert.assertEquals(jsonResponse.getString(cityNameKey), cityName, "City names in the request and response do not match");
 
         // check data
-        Assert.assertTrue(temperatureByName > -100 && temperatureByName < 100, "The data from different endpoints do not match");
+        Assert.assertTrue(temperature > -100 && temperature < 100, "The data is out of range");
 
         // log
-        System.out.println("By city name: in " + cityName + " is " + temperatureByName);
+        System.out.println("By city name: in " + cityName + " is " + temperature);
     }
 
     @Test
     public void getTemperatureByCityId() throws JSONException {
 
-        Response responseById = get(weatherEndpoint + prefixWeatherRequestByCityId + cityId + postfixRequest);
-        JSONObject jsonResponseById = new JSONObject(responseById.asString());
-        int temperatureById = jsonResponseById.getJSONObject(mainObjectKey).getInt(temperatureKey);
+        String weatherByCityIdURL = weatherEndpoint + prefixWeatherRequestByCityId + cityId + postfixRequest;
+        JSONObject jsonResponse = new JSONObject(get(weatherByCityIdURL).asString());
+        int temperature = jsonResponse.getJSONObject(mainObjectKey).getInt(temperatureKey);
 
         // check that the correct response is received
-        Assert.assertEquals(jsonResponseById.getInt(cityIdKey), Integer.parseInt(cityId), "The id's of cities in the request and response do not match");
+        Assert.assertEquals(jsonResponse.getInt(cityIdKey), Integer.parseInt(cityId), "City id's in the request and response do not match");
 
         // check data
-        Assert.assertTrue(temperatureById > -100 && temperatureById < 100, "The data from different endpoints do not match");
+        Assert.assertTrue(temperature > -100 && temperature < 100, "The data is out of range");
 
         // log
-        System.out.println("By city ID: in " + cityName + " is " + temperatureById);
+        System.out.println("By city ID: in " + cityName + " is " + temperature);
     }
 
     @Test
