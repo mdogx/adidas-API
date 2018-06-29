@@ -1,4 +1,4 @@
-# adidas-API
+# adidas-API ///
 
 Project created as test task for ADIDAS. Using RestAssured for actions with REST communications.
 
